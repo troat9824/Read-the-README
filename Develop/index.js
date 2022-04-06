@@ -8,6 +8,32 @@ const questions = () => {
     return inquirer.prompt([
         {
             type: 'input',
+            name: 'github',
+            message: 'What is your GitHub username? (required)',
+            validate: gitInput => {
+                if (gitInput) {
+                    return true
+                } else {
+                    console.log('Please enter your GitHub username!');
+                    return false
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'email',
+            message: 'What is your email address? (required)',
+            validate: emailInput => {
+                if (emailInput) {
+                    return true
+                } else {
+                    console.log('Please enter your email address!');
+                    return false
+                }
+            }
+        },
+        {
+            type: 'input',
             name: 'title',
             message: 'What is the title of your project? (required)',
             validate: titleInput => {
@@ -22,7 +48,7 @@ const questions = () => {
         {
             type: 'input',
             name: 'description',
-            message: 'Provide a description of your project',
+            message: 'Please provide a short description of your project',
             validate: descInput => {
                 if (descInput) {
                     return true
@@ -35,12 +61,28 @@ const questions = () => {
         {
             type: 'input',
             name: 'installation',
-            message: 'Provide instuctions for the installation of your project.'
+            message: 'Please provide instuctions for the installation of your project. (Required)',
+            validate: nameInput => {
+                if (nameInput) {
+                    return true;
+                } else {
+                    console.log('Please enter steps required to install your project!');
+                    return false; 
+                }
+            }
         },
         {
             type: 'input',
             name: 'usage',
-            message: 'Provide usage information.'
+            message: 'How do you use this app? (Required)',
+            validate: nameInput => {
+                if (nameInput) {
+                    return true;
+                } else {
+                    console.log('Please enter a usage description!');
+                    return false; 
+                }
+            }
         },
         {
             type: 'input',
@@ -50,7 +92,7 @@ const questions = () => {
         {
             type: 'input',
             name: 'tests',
-            message: 'Provide test instructions.'
+            message: 'Please provide test instructions.'
         },
         {
             type: 'checkbox',
@@ -58,39 +100,36 @@ const questions = () => {
             message: 'What license is this project protected under? (required)',
             choices: ['BSD', 'MIT', 'GNU']
         },
-        {
-            type: 'input',
-            name: 'github',
-            message: 'What is your GitHub username? (required)',
-            validate: gitInput => {
-                if (gitInput) {
-                    return true
-                } else {
-                    console.log('Please enter your username!');
-                    return false
-                }
-            }
-        },
-        {
-            type: 'input',
-            name: 'email',
-            message: 'What is your email? (required)',
-            validate: emailInput => {
-                if (emailInput) {
-                    return true
-                } else {
-                    console.log('Please enter your email address!');
-                    return false
-                }
-            }
-        },
+        
     ])
 };
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) {}
+function writeToFile = data => {
+    fs.writeFile('README.md', data, err => {
+        // if there is an error 
+        if (err) {
+            console.log(err);
+            return;
+        // when the README has been created 
+        } else {
+            console.log("Congratulations! Your README has been successfully created!")
+        }
+    })
+};
 
 // TODO: Create a function to initialize app
-function init() {}
+function init() {
+    questions()
+    .then(answers => {
+        return generatePage(answers);
+    })
+    .then(data => {
+        return writeToFile(data);
+    })
+    .catch(err => {
+        console.log(err)
+    })
+};
 
 // Function call to initialize app
 init();
