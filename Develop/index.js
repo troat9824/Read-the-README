@@ -104,7 +104,7 @@ const questions = () => {
     ])
 };
 // TODO: Create a function to write README file
-function writeToFile = data => {
+const writeToFile = data => {
     fs.writeFile('README.md', data, err => {
         // if there is an error 
         if (err) {
